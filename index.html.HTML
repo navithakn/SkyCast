@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SkyCast - Your Personal Weather App</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      background-size: cover;
+      background-position: center;
+      transition: background 0.5s ease-in-out;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 2rem;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 3rem;
+    }
+
+    .weather {
+      margin-top: 3rem;
+    }
+
+    input[type="text"] {
+      padding: 0.5rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 0.6rem 1.2rem;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      margin-left: 0.5rem;
+    }
+
+    .result {
+      margin-top: 2rem;
+      font-size: 1.5rem;
+      background-color: rgba(0, 0, 0, 0.3);
+      display: inline-block;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+    }
+
+    .theme-selector {
+      margin-top: 2rem;
+    }
+
+    select {
+      padding: 0.5rem;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>SkyCast</h1>
+    <p>Get simulated weather updates instantly</p>
+  </header>
+
+  <div class="weather">
+    <input id="cityInput" type="text" placeholder="Enter city name..." />
+    <button onclick="getFakeWeather()">Check Weather</button>
+    <div class="result" id="weatherResult"></div>
+  </div>
+
+  <div class="theme-selector">
+    <label for="theme">Choose Theme: </label>
+    <select id="theme" onchange="changeTheme()">
+      <option value="">Default</option>
+      <option value="sunny">Sunny</option>
+      <option value="cloudy">Cloudy</option>
+      <option value="rainy">Rainy</option>
+      <option value="night">Night</option>
+    </select>
+  </div>
+
+  <script>
+    const fakeWeatherData = {
+      "london": { text: "Cloudy with a chance of tea ☁️ 18°C", condition: "cloudy" },
+      "paris": { text: "Sunny and stylish ☀️ 22°C", condition: "sunny" },
+      "new york": { text: "Windy skyscraper vibes 🌬️ 16°C", condition: "cloudy" },
+      "tokyo": { text: "Cherry blossom breeze 🌸 19°C", condition: "sunny" },
+      "delhi": { text: "Hot and bustling 🔥 34°C", condition: "sunny" },
+      "sydney": { text: "Warm with waves 🌊 26°C", condition: "sunny" }
+    };
+
+    const backgrounds = {
+      sunny: "url('https://images.unsplash.com/photo-1501973801540-537f08ccae7b?auto=format&fit=crop&w=1470&q=80')",
+      cloudy: "url('https://images.unsplash.com/photo-1507238691724-e1b79b7ba9b3?auto=format&fit=crop&w=1470&q=80')",
+      rainy: "url('https://images.unsplash.com/photo-1505935428862-770b6f24f629?auto=format&fit=crop&w=1470&q=80')",
+      night: "url('https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1470&q=80')",
+      default: "linear-gradient(to top right, #5dade2, #a9cce3)"
+    };
+
+    function setBackground(condition) {
+      document.body.style.background = condition ? backgrounds[condition] || backgrounds.default : backgrounds.default;
+    }
+
+    function getFakeWeather() {
+      const cityInput = document.getElementById('cityInput').value.trim().toLowerCase();
+      const result = document.getElementById('weatherResult');
+
+      if (!cityInput) {
+        result.innerText = 'Please enter a city name.';
+        setBackground("default");
+        return;
+      }
+
+      const weatherInfo = fakeWeatherData[cityInput];
+
+      if (weatherInfo) {
+        result.innerText = weatherInfo.text;
+        setBackground(weatherInfo.condition);
+      } else {
+        result.innerText = `Simulated weather for ${cityInput.charAt(0).toUpperCase() + cityInput.slice(1)}: Mild and unpredictable 🌦️ 20°C`;
+        setBackground("rainy");
+      }
+    }
+
+    function changeTheme() {
+      const selectedTheme = document.getElementById("theme").value;
+      setBackground(selectedTheme || "default");
+    }
+  </script>
+</body>
+</html>
